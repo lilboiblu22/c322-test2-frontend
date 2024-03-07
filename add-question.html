@@ -22,6 +22,7 @@
         transition: 0.3s;
         width: 20%;
         border-radius: 5px;
+        display: inline-block;
       }
 
       .card:hover {
@@ -42,7 +43,7 @@
     </style>
   </head>
   <body>
-    <form onsubmit="add()">
+    <form >
       <!-- Question Text -->
       <label for="questionText">Question:</label><br />
       <textarea
@@ -61,7 +62,8 @@
         id="imageUpload"
         name="imageFile"
         accept="image/*"
-      /><br />
+      />
+      <br />
 
       <!-- Options -->
       <label>Options:</label><br />
@@ -78,7 +80,7 @@
       <input type="text" id="optionCText" name="optionC" required /><br />
 
       <!-- Submit Button -->
-      <input type="submit" value="Add Question" />
+      <input type="submit" onclick = "add()" value="Add Question" />
     </form>
 
     <div id="list"></div>
@@ -87,7 +89,7 @@
       let host = "http://localhost:8080";
       let questions = [];
       displayTheQuestions();
-
+      
       async function getAll() {
         let response = await fetch(host + "/questions");
         let result = await response.json();
@@ -154,13 +156,13 @@
 
       async function addTheQuestion(question) {
         let message = "";
-
+        let imageFile = document.getElementById("imageUpload").files[0];
         let request = {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: question,
+          body: JSON.stringify(question),
         };
         let response = await fetch(host + "/questions", request);
         if (response.status == 200) {
